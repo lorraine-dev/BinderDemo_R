@@ -2,5 +2,5 @@ Launch repository: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybi
 
 https://notebooks.gesis.org/binder/v2/gh/lorraine-dev/BinderDemo_R/HEAD
 
-https://notebooks.gesis.org/binder/v2/gh/lorraine-dev/BinderDemo_R/HEAD?urlpath=rstudio
+Launch on RStudio: [![Binder](https://mybinder.org/badge_logo.svg)](https://notebooks.gesis.org/binder/v2/gh/lorraine-dev/BinderDemo_R/HEAD?urlpath=rstudio)
  
