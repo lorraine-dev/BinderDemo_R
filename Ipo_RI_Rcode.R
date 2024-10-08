@@ -46,7 +46,7 @@ par(mar=c(5, 4, 4, 2), oma=c(2, 2, 2, 2))
 ##############################
 
 # load data 
-cross_data <- read.csv(file="data/Ipo_RI_survey.csv", stringsAsFactors = TRUE, na.strings = c("NA", ""))
+cross_data <- read.csv(file="Ipo_RI_survey.csv", stringsAsFactors = TRUE, na.strings = c("NA", ""))
 cross_data$r.cross.type <- ordered(cross_data$r.cross.type, levels = c("ACxAC","ACxSC","SCxAC","SCxSC","ACxAL","ACxSL","ALxAC","SLxAC","SCxAL","SCxSL","ALxSC","SLxSC","ALxAL","SLxAL","ALxSL","SLxSL"))
 
 # filter out the population "Ocean"
