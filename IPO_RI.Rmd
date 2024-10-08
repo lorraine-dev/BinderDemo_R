@@ -80,19 +80,6 @@ means_dat$r.cross.type <- ordered(means_dat$r.cross.type, levels = c("ACxAC","AC
 
 ```
 
-# Population Averages
-
-Calculate population averages, using both cross data and means data.
-
-```{r}
-# look at population averages (use data with Ocean)
-list1 <- cross_data %>% group_by(cross.ind) %>% 
-  summarise(cross.loc = first(cross.loc), cross.type = first(cross.type), prop = mean(min1seed)) %>%
-  group_by(cross.loc, cross.type) %>% summarise(prop.mean = mean(prop))
-list2 <- means_dat %>% group_by(cross.loc, cross.type) %>% summarise(mean = mean(mean))
-pop_averages <- full_join(list1, list2, by = "cross.loc")
-```
-
 # Test for differences between different types of crosses
 
 ```{r}
@@ -127,66 +114,4 @@ contrast(lsmeans(full_M_model2, "r.sp"), list(CvL=c(1,0,0,-1), CvH=c(1,-1,-1,0),
 #anova(full_M_model1, glmmTMB(mean ~ (1 | mom.pop/mom) + (1 | dad.pop/dad),  ziformula=~r.sp, data = means_dat))
 #lsmeans(full_M_model1, pairwise ~ r.sp)
 #contrast(lsmeans(full_M_model1, "r.sp"), list(CvL=c(1,0,0,-1), CvH=c(1,-1,-1,0), LvH=c(0,-1,-1,1), H1vH2=c(0,1,-1,0)))
-```
-
-# Modeling Cross Data
-
-Fit generalized linear mixed models (GLMM) to analyze differences between different types of plant crosses.
-
-```{r}
-# Fit GLMM model to cross data
-full_B_model1 <- glmer(min1seed ~ r.sp + (1 | mom.pop/mom/cross.ind) + (1 | dad.pop/dad), family = "binomial", data = cross_data)
-full_B_model2 <- glmer(min1seed ~ r.sp + (1 | mom.pop/mom/cross.ind), family = "binomial", data = cross_data)
-full_B_model3 <- glmer(min1seed ~ (1 | mom.pop/mom/cross.ind), family = "binomial", data = cross_data)
-
-# Compare models
-anova(full_B_model1, full_B_model2, full_B_model3)
-
-# Test model fit
-test_model_fit(full_B_model2)
-
-# Pairwise comparisons
-lsmeans(full_B_model2, pairwise ~ r.sp)
-contrast(lsmeans(full_B_model2, "r.sp"), list(CvL=c(1,0,0,-1), CvH=c(1,-1,-1,0), LvH=c(0,-1,-1,1), H1vH2=c(0,1,-1,0)))
-```
-
-```{r}
-# plot relationahip between number of seeds and distance
-par(mfrow=c(2,1))
-plot(intra_means_C$mean ~ (intra_means_C$dist), xlim = c(0, 2500), ylim = c(0,4), xlab = "Distance (km)", ylab = "Mean number of seeds",
-     pch = intra_means_C$pch, cex = 1.5, lty = 1, col = alpha("#AD3C8C", 0.6))
-abline(summary(cor_dist_M_model2)[[10]][1,1], summary(cor_dist_M_model2)[[10]][2,1])
-plot(intra_means_L$mean ~ intra_means_L$dist, xlim = c(0, 2500), ylim = c(0,4), xlab = "Distance (km)", ylab = "Mean number of seeds",
-     pch = intra_means_C$pch, cex = 1.5, lty = 1, col = alpha("#38B14A", 0.6))
-abline(summary(lac_dist_M_model2)[[10]][1,1], summary(lac_dist_M_model2)[[10]][2,1])
-legend(2000, 4, legend = c("allo", "cross", "sym"), pch = 15:17, col = alpha("black", 0.6))
-par(mfrow=c(1,1))
-```
-
-## Test for F1 cross success
-
-```{r}
-# load data 
-F1_data <- read.csv(file="data/Ipo_RI_F1_crosses.csv", stringsAsFactors = TRUE, na.strings = c("NA", "")) 
-F1_data$type2 <- ordered(F1_data$type2, levels = c("CC", "BCC", "WF1", "BCL", "LL", "BS"))
-mosaicplot(table(F1_data$type2, F1_data$n.seeds), las=2, main=NULL, ylab = "Number of seeds per pod", xlab = "Cross type")
-
-```
-
-```{r}
-# test models of fruit set
-F1_B_model1 <- glmer(min1seed ~ type2 + (1 | mom) + (1 | dad), family = "binomial", data = F1_data)
-F1_B_model2 <- glmer(min1seed ~ (1 | mom) + (1 | dad), family = "binomial", data = F1_data)
-anova(F1_B_model1, F1_B_model2)
-test_model_fit(F1_B_model1)
-lsmeans(F1_B_model1, pairwise ~ type2)
-```
-
-```{r}
-# test models of mean seeds
-F1_N_model1 <- glmer(n.seeds ~ type2 + (1 | mom) + (1 | dad), family = "poisson", data = F1_data)
-F1_N_model2 <- glmer(n.seeds ~ (1 | mom) + (1 | dad), family = "poisson", data = F1_data)
-anova(F1_N_model1, F1_N_model2)
-test_model_fit(F1_B_model1)
-lsmeans(F1_N_model1, pairwise ~ type2)
 ```
