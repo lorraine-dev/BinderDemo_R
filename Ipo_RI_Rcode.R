@@ -27,7 +27,7 @@ test_model_fit <- function(model) {
 #############################################
 
 # load population data
-mdata <- read.csv(file="data/Ipo_RI_survey_pops.csv", stringsAsFactors = TRUE, na.strings = c("NA", ""))
+mdata <- read.csv(file="Ipo_RI_survey_pops.csv", stringsAsFactors = TRUE, na.strings = c("NA", ""))
 
 par(mar=c(1, 1, 1, 1), oma=c(1, 1, 1, 1))
 map("worldHires","usa", xlim=c(-105,-75),ylim=c(15,40), col="gray90", fill=TRUE)
@@ -304,7 +304,7 @@ par(mfrow=c(1,1))
 ####################################################################
 
 # load population locations 
-pop_data <- read.csv(file="data/Ipo_RI_survey_pops.csv", stringsAsFactors = TRUE, na.strings = c("NA", "")) %>%
+pop_data <- read.csv(file="Ipo_RI_survey_pops.csv", stringsAsFactors = TRUE, na.strings = c("NA", "")) %>%
   select(name, lat, long)
 
 # add locations to means data
@@ -392,7 +392,7 @@ par(mfrow=c(1,1))
 #########################################
 
 # load data 
-F1_data <- read.csv(file="data/Ipo_RI_F1_crosses.csv", stringsAsFactors = TRUE, na.strings = c("NA", "")) 
+F1_data <- read.csv(file="Ipo_RI_F1_crosses.csv", stringsAsFactors = TRUE, na.strings = c("NA", "")) 
 F1_data$type2 <- ordered(F1_data$type2, levels = c("CC", "BCC", "WF1", "BCL", "LL", "BS"))
 mosaicplot(table(F1_data$type2, F1_data$n.seeds), las=2, main=NULL, ylab = "Number of seeds per pod", xlab = "Cross type")
 
